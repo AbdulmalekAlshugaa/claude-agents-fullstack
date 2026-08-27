@@ -1,0 +1,37 @@
+# <APP_NAME>
+
+<One-line description of what this app does.>
+
+## Stack
+
+Next.js (App Router) · TypeScript strict · MongoDB via Mongoose · Tailwind CSS ·
+Zod · Vitest · pnpm
+
+## Commands
+
+- `pnpm dev` — dev server
+- `pnpm build` — production build (must pass before any PR)
+- `pnpm test` — run tests
+- `pnpm lint` / `pnpm typecheck` — lint and types
+
+## Architecture
+
+- `src/app/` — routes, layouts, route handlers. Thin: validate → call service.
+- `src/modules/<feature>/` — feature code: `components/`, `services/`, `schemas/`.
+  Services own all business logic and DB access.
+- `src/lib/db/` — connection singleton (`connect.ts`) + Mongoose models (`models/`).
+- `src/lib/env.ts` — Zod-validated env. Never import from client components.
+
+## Rules
+
+- All external input is Zod-validated before reaching a service.
+- Services return plain DTOs (`.lean()` + explicit mapping) — never Mongoose docs.
+- Every server action and route handler checks auth itself.
+- List queries are always paginated.
+- Server components by default; `'use client'` on the smallest leaf that needs it.
+- Every model file uses the `models.X ?? model('X', schema)` hot-reload guard.
+- Conventional commits. No AI attribution or Co-Authored-By trailers, ever.
+
+## Environment
+
+Copy `.env.example` to `.env.local`. Required: `MONGODB_URI`, `AUTH_SECRET`.
