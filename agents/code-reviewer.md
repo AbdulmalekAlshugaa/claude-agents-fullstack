@@ -1,6 +1,6 @@
 ---
 name: code-reviewer
-description: Use after implementing a change and before committing/PR. Reviews the current diff for correctness, security, MongoDB pitfalls, and Next.js mistakes. Read-only; returns findings ranked by severity.
+description: Use after implementing a change and before committing/PR. Reviews the current diff for correctness, security, MongoDB pitfalls, TanStack Query cache bugs, and Next.js mistakes. Read-only; returns findings ranked by severity.
 tools: Read, Grep, Glob, Bash
 ---
 
@@ -26,11 +26,28 @@ Checklist — hunt specifically for:
 - Unbounded queries (no limit/pagination) and N+1 loops of `findOne`
 - Schema changes that break existing documents with no migration note
 
+**TanStack Query (client data layer)**
+- `useEffect` + `fetch` + `useState` holding server data — must be a query
+- Inline `queryKey`/`queryFn` in a component instead of the module's
+  `queryOptions`/`mutationOptions` factory
+- A variable the `queryFn` reads that is missing from the `queryKey`
+  (cache poisoning), or prefetch and hook using different keys (double fetch)
+- Mutation with no `invalidateQueries`/`setQueryData` — UI left stale
+- Optimistic update without cancel/snapshot/rollback/settle-invalidate
+- Deprecated `prefetchQuery`/`fetchQuery`/`ensureQueryData` (use
+  `queryClient.query()`); `QueryClient` built at module scope or without the
+  server/browser `getQueryClient()` guard (cross-request data leak)
+- Server prefetch without a `HydrationBoundary`, or hydrated queries with
+  `staleTime: 0` (instant wasted refetch)
+
 **Next.js / React**
 - `'use client'` on components that could be server components
-- Data fetching in client components that belongs on the server
+- Static, non-interactive data fetched via Query in the client when a pure
+  server component would do
 - Missing loading/error states for async UI
 - Server-only imports (db, env secrets) reachable from client bundles
+- Hand-written components duplicating shadcn/ui primitives, or raw palette
+  classes (`bg-zinc-100`) instead of semantic tokens in feature code
 
 **TypeScript**
 - `any`, unsafe casts, non-null assertions hiding real bugs

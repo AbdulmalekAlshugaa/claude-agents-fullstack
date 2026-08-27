@@ -11,10 +11,17 @@ expectation:
 
 1. **Reproduce or localise.** Read the error/report. Find the exact route,
    component, or service involved.
-2. **Trace the full path**: UI component → hook/fetch → route handler or server
-   action → Zod schema → service → Mongoose query → schema definition. At each
-   hop ask: what shape goes in, what comes out?
+2. **Trace the full path**: UI component → `useQuery`/`useMutation` hook →
+   `queryOptions`/`mutationOptions` factory → server action → Zod schema →
+   service → Mongoose query → schema definition. At each hop ask: what shape
+   goes in, what comes out?
 3. **Check the usual suspects** for this stack:
+   - TanStack Query cache: which cache is stale — the Query cache or the RSC
+     payload? Mutation missing `invalidateQueries`; a variable the `queryFn`
+     reads that isn't in the `queryKey`; prefetch and hook using different
+     keys/args (double fetch or empty hydration); missing `HydrationBoundary`;
+     `staleTime` masking a refetch you expected; optimistic update without
+     rollback corrupting the cache after an error
    - Server/client boundary: stale server component data, missing
      `revalidatePath`/`revalidateTag`, cached fetches (`cache: 'force-cache'`
      defaults)
