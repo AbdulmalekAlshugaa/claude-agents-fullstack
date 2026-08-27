@@ -6,7 +6,7 @@ Personal Claude Code toolkit for building fullstack web apps with
 ## Install (global — available in every project)
 
 ```bash
-git clone https://github.com/malik-onecredit/claude-agents
+git clone https://github.com/AbdulmalekAlshugaa/claude-agents
 cp -R claude-agents/agents claude-agents/skills claude-agents/commands claude-agents/templates ~/.claude/
 cp claude-agents/global-CLAUDE.md ~/.claude/CLAUDE.md
 ```
