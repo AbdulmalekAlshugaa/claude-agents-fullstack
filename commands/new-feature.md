@@ -11,8 +11,9 @@ Workflow:
    parallel.
 2. Show me the plan and wait for my approval — do not implement before I confirm.
 3. After approval, implement following the plan (or spawn **fullstack-implementer**
-   for large features), respecting the api-design, mongodb-data-modeling, and
-   component-design skills.
+   for large features; spawn **data-layer-engineer** when the work is mostly
+   query/mutation wiring), respecting the api-design, mongodb-data-modeling,
+   tanstack-query, shadcn-ui, and component-design skills.
 4. Spawn **test-writer** to cover the new services and key UI states.
 5. Run typecheck, lint, and the full test suite. Report what was built and what
    I should manually verify in the browser.

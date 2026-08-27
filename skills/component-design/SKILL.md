@@ -10,11 +10,16 @@ description: Conventions for React components in Next.js App Router - server vs 
 - **Default to server components.** Add `'use client'` only for state, effects,
   event handlers, or browser APIs — and put the directive on the smallest leaf
   that needs it, not the page.
-- Fetch data in server components (call services directly); pass plain
-  serializable props down. Never pass Mongoose docs, Dates work but prefer ISO
-  strings, ObjectIds must be `.toString()`ed.
-- A client component needing fresh data after a mutation → server action +
-  `revalidatePath`, not client-side refetch loops.
+- Static/one-shot data: fetch in server components (call services directly) and
+  pass plain serializable props down. Never pass Mongoose docs; prefer ISO
+  strings over Dates; ObjectIds must be `.toString()`ed.
+- Data the client interacts with (refetch, pagination, mutation): the server
+  component prefetches via `queryClient.query()` + `HydrationBoundary`, the
+  client component consumes with `useSuspenseQuery` — see the `tanstack-query`
+  skill. Never `useEffect` + `fetch`.
+- Fresh data after a mutation → `invalidateQueries` in the mutation's
+  `onSuccess` (plus `revalidatePath` in the action if RSC-rendered data
+  changed) — never manual refetch loops or `router.refresh()` as a fix.
 
 ## Component structure
 
@@ -41,12 +46,18 @@ description: Conventions for React components in Next.js App Router - server vs 
 
 ## Forms
 
-- Server action + `useActionState` for the standard case.
+- shadcn/ui `form` (react-hook-form + `zodResolver`) submitting through
+  `useMutation` for the standard case; `useActionState` for simple RSC-only
+  forms with no client cache to reconcile.
 - Validate with the same Zod schema on client (nice errors) and server (security).
-- Disable the submit button while pending; surface field-level errors.
+- Disable the submit button while `isPending`; surface field-level errors.
 
 ## Styling
 
+- Compose shadcn/ui primitives from `components/ui/` (generate with
+  `pnpm dlx shadcn@latest add <name>`) — never hand-build a widget the registry
+  already has. Use semantic tokens (`bg-background`, `text-muted-foreground`),
+  not raw palette classes, in feature code. See the `shadcn-ui` skill.
 - Tailwind utilities directly on elements; extract a component when a set of
   classes repeats, not a CSS file.
 - Use a `cn()` helper (clsx + tailwind-merge) for conditional classes.

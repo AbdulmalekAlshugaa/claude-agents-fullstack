@@ -1,6 +1,6 @@
 ---
 name: web-app-scaffold
-description: Bootstrap a new fullstack web app with Next.js (App Router), TypeScript, MongoDB/Mongoose, Tailwind, Zod, and Vitest. Use when starting a new project or when the user says "new app", "scaffold", or "set up a project".
+description: Bootstrap a new fullstack web app with Next.js (App Router), TypeScript, MongoDB/Mongoose, TanStack Query, shadcn/ui, Tailwind, Zod, and Vitest. Use when starting a new project or when the user says "new app", "scaffold", or "set up a project".
 ---
 
 # Scaffold a fullstack Next.js + MongoDB app
@@ -14,26 +14,38 @@ description: Bootstrap a new fullstack web app with Next.js (App Router), TypeSc
 
 2. **Install the stack**:
    ```bash
-   pnpm add mongoose zod
-   pnpm add -D vitest @vitejs/plugin-react @testing-library/react @testing-library/jest-dom jsdom mongodb-memory-server
+   pnpm add mongoose zod @tanstack/react-query
+   pnpm add -D vitest @vitejs/plugin-react @testing-library/react @testing-library/jest-dom jsdom mongodb-memory-server @tanstack/react-query-devtools @tanstack/eslint-plugin-query
+   pnpm dlx shadcn@latest init            # then: pnpm dlx shadcn@latest add button card ...
    ```
 
 3. **Folder layout** under `src/`:
    ```
    src/
    ├── app/                  # routes, layouts, route handlers
+   │   ├── providers.tsx     # 'use client': QueryClientProvider (+ devtools)
    │   └── api/<resource>/route.ts
    ├── components/           # shared UI
+   │   └── ui/               # shadcn/ui components (CLI-generated)
    ├── modules/<feature>/
    │   ├── components/
    │   ├── services/         # all business logic + DB access
-   │   └── schemas/          # Zod schemas + z.infer DTO types
+   │   ├── schemas/          # Zod schemas + z.infer DTO types
+   │   ├── actions.ts        # 'use server' actions (auth → parse → service)
+   │   ├── keys.ts           # query key factory
+   │   ├── queries.ts        # queryOptions factories
+   │   └── mutations.ts      # mutationOptions factories
    └── lib/
        ├── db/
        │   ├── connect.ts    # cached connection singleton
        │   └── models/       # Mongoose models
+       ├── query/
+       │   └── get-query-client.ts  # server/browser-guarded QueryClient
        └── env.ts            # Zod-validated env
    ```
+
+   Wire `getQueryClient`, `providers.tsx`, and mount `<Providers>` in
+   `app/layout.tsx` exactly as specified in the `tanstack-query` skill.
 
 4. **DB connection singleton** — `src/lib/db/connect.ts` must cache the connection
    on `globalThis` (Next.js hot-reload creates duplicate connections otherwise):

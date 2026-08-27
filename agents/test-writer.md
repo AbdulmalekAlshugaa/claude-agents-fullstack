@@ -14,11 +14,18 @@ Workflow:
 2. Prioritise by value:
    1. **Services** (business logic + DB access) — the highest-value tests
    2. **Zod schemas** — reject/accept edge cases
-   3. **Pure helpers** in `lib/`
-   4. **Components** — render states: loading, empty, error, populated
+   3. **Query key factories** — assert the key shape per input; every
+      invalidation in the app depends on this contract
+   4. **Pure helpers** in `lib/`
+   5. **Components** — render states: loading, empty, error, populated
 3. For DB-touching services, use `mongodb-memory-server` if the project has it;
    otherwise mock the model layer at the module boundary. Never hit a real database.
-4. Run the tests. Iterate until green. Then run the whole suite to check for
+4. Components using TanStack Query hooks get a wrapper with a **per-test**
+   `QueryClientProvider` (`new QueryClient({ defaultOptions: { queries:
+   { retry: false } } })` — retries turn failures into timeouts). Mock at the
+   server-action boundary (`vi.mock('../actions')`), never the hooks. For
+   mutations, assert the cache effect (invalidation/updated data), not the spy.
+5. Run the tests. Iterate until green. Then run the whole suite to check for
    regressions.
 
 Rules:

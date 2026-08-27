@@ -7,11 +7,19 @@ description: Conventions for Next.js route handlers, server actions, Zod validat
 
 ## Choosing the mechanism
 
-- **Server component fetching data** → call the service directly. No HTTP hop.
-- **Mutations from your own UI** → server action.
+- **Server component rendering static/one-shot data** → call the service
+  directly. No HTTP hop.
+- **Data a client component reads (refetched, paginated, mutated, shared)** →
+  server action used as the `queryFn` of a TanStack Query `queryOptions`
+  factory (see the `tanstack-query` skill).
+- **Mutations from your own UI** → server action, wrapped in `useMutation` when
+  called from a client component (cache invalidation), or `useActionState` for
+  plain RSC forms.
 - **Endpoint consumed by external clients / mobile / webhooks** → route handler.
+  Also switch a read to a `GET` route handler when it needs HTTP/CDN caching or
+  parallel requests (server actions serialise).
 - Never build a route handler just so your own client component can `fetch` it —
-  use a server action or lift the fetch to a server component.
+  the action-as-queryFn pattern covers that.
 
 ## Route handler shape (thin)
 
@@ -44,9 +52,15 @@ lines; anything more belongs in the service.
 - File-level `'use server'` in `modules/<feature>/actions.ts`.
 - **Every action validates input with Zod and checks auth itself** — server
   actions are public HTTP endpoints regardless of where the button lives.
-- Return typed results (`{ ok: true, data } | { ok: false, error }`), don't throw
-  for expected failures.
-- Call `revalidatePath`/`revalidateTag` after mutations that affect rendered data.
+- Return shape depends on the caller:
+  - Used as a TanStack Query `queryFn`/`mutationFn` → return the plain DTO and
+    **throw** on failure (Query needs a rejected promise for its error state).
+  - Called from `useActionState` → return typed results
+    (`{ ok: true, data } | { ok: false, error }`), don't throw for expected
+    failures.
+- After a mutation: `revalidatePath`/`revalidateTag` if RSC-rendered data
+  changed; the client-side `invalidateQueries` happens in the mutation's
+  `onSuccess`, not here.
 
 ## Services
 

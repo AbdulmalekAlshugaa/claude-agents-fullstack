@@ -58,6 +58,20 @@ Stub `dbConnect` to a no-op in tests (connection is already open).
   components don't render in jsdom — test their services instead and keep the
   component thin.
 - Mock server actions at the import boundary with `vi.mock`.
+- Components using TanStack Query hooks: wrap in a `QueryClientProvider` with a
+  fresh per-test client and `retry: false` (retries turn failures into
+  timeouts):
+  ```tsx
+  function renderWithQuery(ui: React.ReactElement) {
+    const client = new QueryClient({ defaultOptions: { queries: { retry: false } } })
+    return render(<QueryClientProvider client={client}>{ui}</QueryClientProvider>)
+  }
+  ```
+  Mock the actions the option factories call — never the hooks themselves. For
+  mutations, assert the visible outcome (updated list, toast, disabled button),
+  not that `invalidateQueries` was spied on.
+- Query key factories get direct unit tests: assert the key shape per input —
+  every invalidation in the app depends on that contract.
 
 ## Before claiming done
 

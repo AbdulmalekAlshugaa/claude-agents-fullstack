@@ -4,8 +4,8 @@
 
 ## Stack
 
-Next.js (App Router) · TypeScript strict · MongoDB via Mongoose · Tailwind CSS ·
-Zod · Vitest · pnpm
+Next.js (App Router) · TypeScript strict · MongoDB via Mongoose ·
+TanStack Query v5 · shadcn/ui · Tailwind CSS · Zod · Vitest · pnpm
 
 ## Commands
 
@@ -17,9 +17,13 @@ Zod · Vitest · pnpm
 ## Architecture
 
 - `src/app/` — routes, layouts, route handlers. Thin: validate → call service.
-- `src/modules/<feature>/` — feature code: `components/`, `services/`, `schemas/`.
-  Services own all business logic and DB access.
+- `src/modules/<feature>/` — feature code: `components/`, `services/`, `schemas/`,
+  `actions.ts` (server actions), `keys.ts` + `queries.ts` + `mutations.ts`
+  (TanStack Query factories). Services own all business logic and DB access.
+- `src/components/ui/` — shadcn/ui components, CLI-generated
+  (`pnpm dlx shadcn@latest add <name>`), composed by feature components.
 - `src/lib/db/` — connection singleton (`connect.ts`) + Mongoose models (`models/`).
+- `src/lib/query/get-query-client.ts` — the only place a QueryClient is created.
 - `src/lib/env.ts` — Zod-validated env. Never import from client components.
 
 ## Rules
@@ -27,6 +31,13 @@ Zod · Vitest · pnpm
 - All external input is Zod-validated before reaching a service.
 - Services return plain DTOs (`.lean()` + explicit mapping) — never Mongoose docs.
 - Every server action and route handler checks auth itself.
+- Client components read server data through `useQuery`/`useSuspenseQuery` with
+  a `queryOptions` factory — never `useEffect` + `fetch`. Query keys come from
+  the module's `keys.ts` factory only.
+- Every mutation invalidates its covering query-key prefix (`onSuccess`), plus
+  `revalidatePath` when RSC-rendered data changed.
+- Routes that render Query data prefetch on the server
+  (`void queryClient.query(opts).catch(noop)` + `HydrationBoundary`).
 - List queries are always paginated.
 - Server components by default; `'use client'` on the smallest leaf that needs it.
 - Every model file uses the `models.X ?? model('X', schema)` hot-reload guard.
