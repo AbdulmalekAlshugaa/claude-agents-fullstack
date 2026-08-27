@@ -40,7 +40,7 @@ Rules:
   primitives. Edit `components/ui/` files only for project-wide restyles, and
   know that `add` will not overwrite your edits silently — it prompts.
 - Before building any widget by hand, check the registry
-  (`pnpm dlx shadcn@latest search <term>` or ui.shadcn.com/docs/components) —
+  (`pnpm dlx shadcn@latest search -q <term>` or ui.shadcn.com/docs/components) —
   dialogs, comboboxes, date pickers, data tables, charts already exist.
 - Don't install all components "to be safe" — add on demand; each one is code
   you now own.
