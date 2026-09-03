@@ -5,6 +5,8 @@ Personal Claude Code toolkit for building fullstack web apps with
 
 **🔲 Showcase:** [abdulmalekalshugaa.github.io/claude-agents-fullstack](https://abdulmalekalshugaa.github.io/claude-agents-fullstack/) — every agent, skill, and command at a glance.
 
+[![Toolkit showcase page](docs/preview.png)](https://abdulmalekalshugaa.github.io/claude-agents-fullstack/)
+
 ## Install (global — available in every project)
 
 ```bash
