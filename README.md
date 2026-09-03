@@ -3,6 +3,8 @@
 Personal Claude Code toolkit for building fullstack web apps with
 **Next.js (App Router) + TypeScript + MongoDB + TanStack Query + shadcn/ui**.
 
+**🔲 Showcase:** [abdulmalekalshugaa.github.io/claude-agents-fullstack](https://abdulmalekalshugaa.github.io/claude-agents-fullstack/) — every agent, skill, and command at a glance.
+
 ## Install (global — available in every project)
 
 ```bash
