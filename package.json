@@ -1,0 +1,38 @@
+{
+  "name": "claude-agents-fullstack",
+  "version": "1.0.0",
+  "description": "Claude Code toolkit: 7 agents, 10 skills, 5 commands for Next.js + TypeScript + PostgreSQL (Drizzle) or MongoDB + TanStack Query + shadcn/ui",
+  "bin": {
+    "claude-agents-fullstack": "bin/install.mjs"
+  },
+  "type": "module",
+  "files": [
+    "bin/",
+    "agents/",
+    "skills/",
+    "commands/",
+    "templates/",
+    "global-CLAUDE.md",
+    "install.sh"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AbdulmalekAlshugaa/claude-agents-fullstack.git"
+  },
+  "homepage": "https://abdulmalekalshugaa.github.io/claude-agents-fullstack/",
+  "author": "Abdulmalek Alshugaa",
+  "license": "MIT",
+  "keywords": [
+    "claude-code",
+    "claude",
+    "agents",
+    "skills",
+    "nextjs",
+    "tanstack-query",
+    "drizzle",
+    "shadcn"
+  ]
+}

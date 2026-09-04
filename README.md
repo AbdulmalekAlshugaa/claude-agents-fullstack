@@ -10,15 +10,23 @@ Personal Claude Code toolkit for building fullstack web apps with
 ## Install (global — available in every project)
 
 ```bash
-git clone https://github.com/AbdulmalekAlshugaa/claude-agents-fullstack
-cd claude-agents-fullstack
-./install.sh            # asks which DB is your default: PostgreSQL or MongoDB
+npx claude-agents-fullstack        # asks which DB is your default: PostgreSQL or MongoDB
 ```
 
-Non-interactive: `./install.sh --db postgres` or `./install.sh --db mongodb`.
+Non-interactive: `npx claude-agents-fullstack --db postgres` (or `--db mongodb`).
 Both databases stay installed and supported — the choice only sets which one
 new apps default to. An existing `~/.claude/CLAUDE.md` is backed up to
 `CLAUDE.md.bak` first.
+
+<details><summary>From a clone instead</summary>
+
+```bash
+git clone https://github.com/AbdulmalekAlshugaa/claude-agents-fullstack
+cd claude-agents-fullstack
+./install.sh                       # same prompts and flags
+```
+
+</details>
 
 <details><summary>Manual install (no script)</summary>
 
