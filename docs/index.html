@@ -497,16 +497,18 @@
         <button class="copy-btn" id="copy" type="button">copy</button>
       </div>
       <div class="code-scroll">
-<pre id="install-code"><span class="c"># available in every project</span>
+<pre id="install-code"><span class="c"># available in every project — the installer asks
+# which database is your default: PostgreSQL or MongoDB</span>
 git clone https://github.com/AbdulmalekAlshugaa/claude-agents-fullstack
-cp -R claude-agents-fullstack/agents claude-agents-fullstack/skills claude-agents-fullstack/commands claude-agents-fullstack/templates ~/.claude/
-cp claude-agents-fullstack/global-CLAUDE.md ~/.claude/CLAUDE.md</pre>
+cd claude-agents-fullstack
+./install.sh</pre>
       </div>
     </div>
     <p class="install-note">
-      Per-project instead: copy <code>agents/</code>, <code>skills/</code>, <code>commands/</code> into the
-      repo's <code>.claude/</code> directory and drop <code>templates/CLAUDE.md.template</code> in the root
-      as <code>CLAUDE.md</code>.
+      Non-interactive: <code>./install.sh --db postgres</code> or <code>--db mongodb</code> — both stay
+      installed; the flag only sets the default for new apps. Per-project instead: copy
+      <code>agents/</code>, <code>skills/</code>, <code>commands/</code> into the repo's <code>.claude/</code>
+      directory and drop <code>templates/CLAUDE.md.template</code> in the root as <code>CLAUDE.md</code>.
     </p>
   </section>
 

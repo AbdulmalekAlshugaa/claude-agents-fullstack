@@ -23,6 +23,7 @@ Test real query behavior, constraints, and indexes without mocking the ORM.
 ```ts
 import { PGlite } from '@electric-sql/pglite'
 import { drizzle } from 'drizzle-orm/pglite'
+import { migrate } from 'drizzle-orm/pglite/migrator'
 import * as schema from '@/lib/db/schema'
 
 const client = new PGlite()

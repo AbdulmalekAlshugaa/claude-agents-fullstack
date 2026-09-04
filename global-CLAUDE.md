@@ -5,9 +5,11 @@
 When I start a new web app or the project doesn't dictate otherwise, use:
 
 - **Next.js** (App Router, latest stable) with **TypeScript** (strict mode)
+<!-- db:default:start -->
 - **PostgreSQL** via **Drizzle ORM** for data (Neon in prod, local/docker in
   dev) — **MongoDB via Mongoose** as the alternative for genuinely
   document-shaped domains
+<!-- db:default:end -->
 - **TanStack Query v5** for ALL client-side data fetching and mutations
   (`queryOptions`/`mutationOptions` factories over server actions — see the
   `tanstack-query` skill). Never `useEffect` + `fetch` for server data.
