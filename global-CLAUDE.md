@@ -5,7 +5,9 @@
 When I start a new web app or the project doesn't dictate otherwise, use:
 
 - **Next.js** (App Router, latest stable) with **TypeScript** (strict mode)
-- **MongoDB** via **Mongoose** for data (Atlas in prod, local/docker in dev)
+- **PostgreSQL** via **Drizzle ORM** for data (Neon in prod, local/docker in
+  dev) — **MongoDB via Mongoose** as the alternative for genuinely
+  document-shaped domains
 - **TanStack Query v5** for ALL client-side data fetching and mutations
   (`queryOptions`/`mutationOptions` factories over server actions — see the
   `tanstack-query` skill). Never `useEffect` + `fetch` for server data.
@@ -25,18 +27,19 @@ When I start a new web app or the project doesn't dictate otherwise, use:
   - `components/` — shared UI; `components/ui/` is shadcn's (CLI-managed)
   - `modules/<feature>/` — feature code: `components/`, `services/`, `schemas/`,
     `actions.ts`, plus the data layer: `keys.ts`, `queries.ts`, `mutations.ts`
-  - `lib/db/` — Mongo connection singleton + Mongoose models
+  - `lib/db/` — DB client cached on `globalThis` + schema (Drizzle `schema/`
+    or Mongoose `models/`)
   - `lib/query/` — `getQueryClient()` (server/browser-guarded QueryClient)
   - `lib/` — cross-cutting helpers (auth, env, fetch wrappers)
-- Route handlers and server actions never touch Mongoose models directly —
+- Route handlers and server actions never touch the database directly —
   they call a service function. Services own DB access and business logic.
 - Data ownership: pure server-rendered views call services directly and refresh
   via `revalidatePath`; anything a client component reads goes through a
   `queryOptions` factory and refreshes via `invalidateQueries`. Every mutation
   reconciles the cache(s) it affects.
 - Validate all external input with Zod before it reaches a service.
-- Never expose Mongoose documents to the client — map to plain DTOs
-  (`.lean()` + explicit mapping) so `_id`/`__v` and internals don't leak.
+- Never expose raw DB rows or Mongoose documents to the client — map to plain
+  DTOs (explicit mapping; `.lean()` first in Mongoose) so internals don't leak.
 
 ## Commit & PR authoring
 

@@ -26,7 +26,7 @@ src/modules/<feature>/
 ├── queries.ts     # queryOptions factories (reads)
 ├── mutations.ts   # mutationOptions factories (writes)
 ├── actions.ts     # 'use server' — the transport both of the above call
-├── services/      # DB access (unchanged: services own Mongo + business logic)
+├── services/      # DB access (unchanged: services own the DB + business logic)
 └── schemas/       # Zod schemas + z.infer types
 ```
 
@@ -96,7 +96,8 @@ queryClient.getQueryData(userOptions(id).queryKey)    // typed User | undefined
 ```
 
 For paginated lists use `infiniteQueryOptions` with the same shape plus
-`initialPageParam` / `getNextPageParam` (cursor-based — see mongodb-data-modeling).
+`initialPageParam` / `getNextPageParam` (keyset/cursor-based — see the
+project's data-modeling skill).
 
 ## 3. Transport: server actions, not private route handlers
 
@@ -123,8 +124,9 @@ export async function listUsersAction(input: unknown) {
   to enter its `error` state. Actions used as a `mutationFn` throw too. This is the
   one place the repo's "return result objects, don't throw" rule is inverted;
   keep the result-object style for actions called directly from `useActionState`.
-- Return plain DTOs only (services already `.lean()` + map). No Mongoose docs,
-  no `ObjectId`, no `Date` — the payload crosses a serialisation boundary twice.
+- Return plain DTOs only (services already map rows/documents). No raw DB
+  rows, no `ObjectId`, no `Date` — the payload crosses a serialisation
+  boundary twice.
 - **Escape hatch:** switch that read to a `GET` route handler + typed `fetch` when
   it is hot enough to want HTTP/CDN caching, must be parallel (server actions are
   POSTs and Next.js serialises them), or is consumed by a non-browser client.

@@ -66,14 +66,16 @@ lines; anything more belongs in the service.
 
 - Live in `modules/<feature>/services/`, one exported function per file for
   non-trivial ones.
-- Own ALL DB access and business rules. Call `dbConnect()` at the top.
+- Own ALL DB access and business rules (import `db` for Drizzle; call
+  `dbConnect()` first for Mongoose).
 - Input: already-validated typed data (the `z.infer` type). Output: plain DTOs.
 - Expected failures return result objects; only truly exceptional states throw.
 
 ## Status codes & errors
 
 400 invalid input · 401 unauthenticated · 403 unauthorized · 404 not found ·
-409 conflict (duplicate key → catch Mongo error code 11000) · 500 everything else.
+409 conflict (unique violation → catch Postgres `23505` / Mongo `11000`) ·
+500 everything else.
 Never leak internal error messages or stack traces in responses; log them
 server-side instead.
 

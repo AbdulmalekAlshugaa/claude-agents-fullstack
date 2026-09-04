@@ -4,7 +4,7 @@
 
 ## Stack
 
-Next.js (App Router) · TypeScript strict · MongoDB via Mongoose ·
+Next.js (App Router) · TypeScript strict · PostgreSQL via Drizzle <!-- or: MongoDB via Mongoose --> ·
 TanStack Query v5 · shadcn/ui · Tailwind CSS · Zod · Vitest · pnpm
 
 ## Commands
@@ -22,14 +22,17 @@ TanStack Query v5 · shadcn/ui · Tailwind CSS · Zod · Vitest · pnpm
   (TanStack Query factories). Services own all business logic and DB access.
 - `src/components/ui/` — shadcn/ui components, CLI-generated
   (`pnpm dlx shadcn@latest add <name>`), composed by feature components.
-- `src/lib/db/` — connection singleton (`connect.ts`) + Mongoose models (`models/`).
+- `src/lib/db/` — client cached on `globalThis` (`index.ts`) + Drizzle tables
+  (`schema/`) and committed migrations in `./drizzle/`.
+  <!-- Mongo variant: connect.ts singleton + models/ -->
 - `src/lib/query/get-query-client.ts` — the only place a QueryClient is created.
 - `src/lib/env.ts` — Zod-validated env. Never import from client components.
 
 ## Rules
 
 - All external input is Zod-validated before reaching a service.
-- Services return plain DTOs (`.lean()` + explicit mapping) — never Mongoose docs.
+- Services return plain DTOs (explicit mapping; `.lean()` first in Mongoose) —
+  never raw rows or Mongoose docs.
 - Every server action and route handler checks auth itself.
 - Client components read server data through `useQuery`/`useSuspenseQuery` with
   a `queryOptions` factory — never `useEffect` + `fetch`. Query keys come from
@@ -40,9 +43,11 @@ TanStack Query v5 · shadcn/ui · Tailwind CSS · Zod · Vitest · pnpm
   (`void queryClient.query(opts).catch(noop)` + `HydrationBoundary`).
 - List queries are always paginated.
 - Server components by default; `'use client'` on the smallest leaf that needs it.
-- Every model file uses the `models.X ?? model('X', schema)` hot-reload guard.
+- Schema changes ship with a reviewed `drizzle-kit generate` migration.
+  <!-- Mongo variant: every model file uses the models.X ?? model('X', schema) guard -->
 - Conventional commits. No AI attribution or Co-Authored-By trailers, ever.
 
 ## Environment
 
-Copy `.env.example` to `.env.local`. Required: `MONGODB_URI`, `AUTH_SECRET`.
+Copy `.env.example` to `.env.local`. Required: `DATABASE_URL` (or `MONGODB_URI`),
+`AUTH_SECRET`.

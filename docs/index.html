@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Claude Code toolkit: seven agents, nine skills, five commands for Next.js + TypeScript + MongoDB + TanStack Query + shadcn/ui.">
+<meta name="description" content="Claude Code toolkit: seven agents, ten skills, five commands for Next.js + TypeScript + PostgreSQL (Drizzle) or MongoDB + TanStack Query + shadcn/ui.">
 <title>Claude Agents Fullstack</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&display=swap">
 <style>
@@ -321,7 +321,7 @@
       conventions, so nothing they build contradicts anything else.
     </p>
     <p class="stackline">
-      <span>Next.js App Router</span> · <span>TypeScript strict</span> · <span>MongoDB / Mongoose</span> ·
+      <span>Next.js App Router</span> · <span>TypeScript strict</span> · <span>PostgreSQL / Drizzle</span> · <span>MongoDB optional</span> ·
       <span>TanStack Query v5</span> · <span>shadcn/ui</span> · <span>Zod</span> · <span>Vitest</span>
     </p>
     <div class="cta-row">
@@ -350,8 +350,9 @@
     <div class="sec-head"><h2>Agents</h2><span class="count">REGISTRY · 07</span></div>
     <p class="sec-note">
       Four advisors that only read, three engineers that write. Every one of them enforces the
-      same rules: services own the database, Zod guards every boundary, TanStack Query owns
-      client state, and mutations always reconcile the cache.
+      same rules: services own the database (Postgres via Drizzle by default, MongoDB where the
+      domain fits it), Zod guards every boundary, TanStack Query owns client state, and mutations
+      always reconcile the cache.
     </p>
     <div class="agents">
 
@@ -393,9 +394,10 @@
         <i class="dt tl"></i><i class="dt tr"></i><i class="dt br"></i><i class="dt bl"></i>
         <div class="card">
           <div class="top-row"><span class="name">db-designer</span><span class="badge ro">READ-ONLY</span></div>
-          <p>MongoDB modeling for the queries you actually run: embed vs reference, ESR compound
-             indexes, migration notes — returns schemas, tradeoffs, and what each design makes expensive.</p>
-          <div class="foot">designs for real access patterns</div>
+          <p>Schema design for the queries you actually run — Postgres/Drizzle relations and
+             indexes by default, Mongo embed-vs-reference where the project uses it — with migration
+             plans, tradeoffs, and what each design makes expensive.</p>
+          <div class="foot">Postgres / Drizzle default · Mongo supported</div>
         </div>
       </div>
 
@@ -468,7 +470,7 @@
   </section>
 
   <section id="skills">
-    <div class="sec-head"><h2>Skills</h2><span class="count">CONVENTIONS · 09</span></div>
+    <div class="sec-head"><h2>Skills</h2><span class="count">CONVENTIONS · 10</span></div>
     <p class="sec-note">
       The shared rulebook every agent reads before touching code — so the planner's plan, the
       implementer's code, and the reviewer's checklist all describe the same architecture.
@@ -477,12 +479,13 @@
       <div class="skill"><span class="sname">tanstack-query</span><span class="sdesc">The data layer: option factories, key design, SSR hydration, invalidation, optimistic updates.</span></div>
       <div class="skill"><span class="sname">shadcn-ui</span><span class="sdesc">CLI-generated components, semantic tokens, forms, and the AI SDK chat helpers.</span></div>
       <div class="skill"><span class="sname">web-app-scaffold</span><span class="sdesc">Bootstrap the whole stack, from create-next-app to a green first build.</span></div>
+      <div class="skill"><span class="sname">postgres-data-modeling</span><span class="sdesc">Drizzle schemas, relations, indexes, keyset pagination, drizzle-kit migrations.</span></div>
       <div class="skill"><span class="sname">mongodb-data-modeling</span><span class="sdesc">Mongoose schemas, embed vs reference, ESR indexes, lean reads, pagination.</span></div>
       <div class="skill"><span class="sname">api-design</span><span class="sdesc">Server actions vs route handlers, Zod at every boundary, thin handlers.</span></div>
       <div class="skill"><span class="sname">component-design</span><span class="sdesc">Server/client split, the four async UI states, composition over prop bags.</span></div>
       <div class="skill"><span class="sname">auth</span><span class="sdesc">Auth.js v5 — the session checked at every entry point, ownership in the query itself.</span></div>
-      <div class="skill"><span class="sname">testing</span><span class="sdesc">Vitest, in-memory Mongo, per-test QueryClient, behaviour over implementation.</span></div>
-      <div class="skill"><span class="sname">deploy</span><span class="sdesc">Vercel + Atlas checklist, env validation that fails loudly, CI minimum.</span></div>
+      <div class="skill"><span class="sname">testing</span><span class="sdesc">Vitest, in-process Postgres/Mongo, per-test QueryClient, behaviour over implementation.</span></div>
+      <div class="skill"><span class="sname">deploy</span><span class="sdesc">Vercel + Neon/Atlas checklist, env validation that fails loudly, CI minimum.</span></div>
     </div>
   </section>
 

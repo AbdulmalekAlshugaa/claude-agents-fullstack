@@ -11,7 +11,8 @@ description: Conventions for React components in Next.js App Router - server vs 
   event handlers, or browser APIs — and put the directive on the smallest leaf
   that needs it, not the page.
 - Static/one-shot data: fetch in server components (call services directly) and
-  pass plain serializable props down. Never pass Mongoose docs; prefer ISO
+  pass plain serializable props down. Never pass raw DB rows or Mongoose docs;
+  prefer ISO
   strings over Dates; ObjectIds must be `.toString()`ed.
 - Data the client interacts with (refetch, pagination, mutation): the server
   component prefetches via `queryClient.query()` + `HydrationBoundary`, the

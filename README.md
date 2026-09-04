@@ -1,7 +1,7 @@
 # claude-agents-fullstack
 
 Personal Claude Code toolkit for building fullstack web apps with
-**Next.js (App Router) + TypeScript + MongoDB + TanStack Query + shadcn/ui**.
+**Next.js (App Router) + TypeScript + PostgreSQL (Drizzle) or MongoDB + TanStack Query + shadcn/ui**.
 
 **🔲 Showcase:** [abdulmalekalshugaa.github.io/claude-agents-fullstack](https://abdulmalekalshugaa.github.io/claude-agents-fullstack/) — every agent, skill, and command at a glance.
 
@@ -23,7 +23,7 @@ directory and `templates/CLAUDE.md.template` to the repo root as `CLAUDE.md`.
 | Dir | What |
 |---|---|
 | `agents/` | Subagents: `planner`, `fullstack-implementer`, `data-layer-engineer`, `db-designer`, `code-reviewer`, `test-writer`, `debugger` |
-| `skills/` | Stack conventions: scaffold, TanStack Query data layer, shadcn/ui, MongoDB modeling, API design, components, auth, testing, deploy |
+| `skills/` | Stack conventions: scaffold, TanStack Query data layer, shadcn/ui, Postgres/Drizzle modeling, MongoDB modeling, API design, components, auth, testing, deploy |
 | `commands/` | Slash commands: `/new-app`, `/new-feature`, `/review`, `/fix`, `/ship` |
 | `templates/` | `CLAUDE.md.template` — drop into each new app repo |
 | `global-CLAUDE.md` | Global preferences for `~/.claude/CLAUDE.md` |

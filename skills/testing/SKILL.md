@@ -1,9 +1,9 @@
 ---
 name: testing
-description: Testing strategy and Vitest conventions for Next.js + TypeScript + MongoDB apps - what to test, how to test services against MongoDB, and component testing. Use when writing tests or setting up test infrastructure.
+description: Testing strategy and Vitest conventions for Next.js + TypeScript apps on Postgres/Drizzle or MongoDB - what to test, how to test services against a real in-process database, and component testing. Use when writing tests or setting up test infrastructure.
 ---
 
-# Testing (Vitest + Testing Library + mongodb-memory-server)
+# Testing (Vitest + Testing Library + in-process DB)
 
 ## Priority order — spend effort where bugs live
 
@@ -14,10 +14,33 @@ description: Testing strategy and Vitest conventions for Next.js + TypeScript + 
    interactions. Test through the DOM, not implementation.
 5. Skip: trivial pass-through code, styles, Next.js framework behavior.
 
-## Service tests with a real (in-memory) Mongo
+## Service tests with a real (in-process) database
 
-Use `mongodb-memory-server` — tests real query behavior, indexes, and unique
-constraints without mocking Mongoose:
+Test real query behavior, constraints, and indexes without mocking the ORM.
+
+**Postgres (default)** — PGlite, an in-process Postgres:
+
+```ts
+import { PGlite } from '@electric-sql/pglite'
+import { drizzle } from 'drizzle-orm/pglite'
+import * as schema from '@/lib/db/schema'
+
+const client = new PGlite()
+export const testDb = drizzle(client, { schema })
+
+beforeAll(async () => {
+  // apply the committed migrations (or push the schema) to the fresh instance
+  await migrate(testDb, { migrationsFolder: './drizzle' })
+})
+afterEach(async () => {
+  // truncate all tables between tests
+})
+```
+
+Put this in a shared `src/test/setup-db.ts` and stub `@/lib/db` with the test
+instance via `vi.mock` so services under test hit PGlite.
+
+**Mongo** — `mongodb-memory-server`:
 
 ```ts
 import { MongoMemoryServer } from 'mongodb-memory-server'
@@ -38,7 +61,6 @@ afterAll(async () => {
 })
 ```
 
-Put this in a shared `src/test/setup-db.ts`, import per suite that needs it.
 Stub `dbConnect` to a no-op in tests (connection is already open).
 
 ## Conventions

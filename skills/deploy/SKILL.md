@@ -1,9 +1,9 @@
 ---
 name: deploy
-description: Deployment checklist for Next.js + MongoDB apps - Vercel or Docker/Node hosting, MongoDB Atlas setup, env management, and production readiness. Use when shipping an app to production or setting up CI.
+description: Deployment checklist for Next.js apps - Vercel or Docker/Node hosting, hosted Postgres (Neon) or MongoDB Atlas, env management, and production readiness. Use when shipping an app to production or setting up CI.
 ---
 
-# Deploy (Vercel + MongoDB Atlas by default)
+# Deploy (Vercel + Neon Postgres by default; Atlas for Mongo)
 
 ## Pre-deploy checklist
 
@@ -15,8 +15,22 @@ description: Deployment checklist for Next.js + MongoDB apps - Vercel or Docker/
   uptime checks.
 - List endpoints are paginated; mutations are auth-checked (spot-check with the
   code-reviewer agent).
+- Postgres: committed Drizzle migrations are up to date
+  (`pnpm drizzle-kit generate` produces no diff) and `db:migrate` runs in the
+  deploy step, never `db:push` against prod.
 
-## MongoDB Atlas
+## Hosted Postgres (Neon or similar)
+
+- Serverless driver or connection pooling (Neon pools for you; on plain
+  Postgres use pgBouncer) — serverless functions without pooling exhaust
+  connections.
+- One database per app, one role per app with least privilege — never the
+  superuser in `DATABASE_URL`.
+- Point preview deployments at a branch/staging database, never prod. Neon
+  branches map 1:1 to Vercel preview branches nicely.
+- Backups/PITR on before real users exist.
+
+## MongoDB Atlas (Mongo projects)
 
 - Free M0 cluster for hobby, M10+ for anything real.
 - **Network access**: Vercel has no static IPs on hobby — allow `0.0.0.0/0` and
