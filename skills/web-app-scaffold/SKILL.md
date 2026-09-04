@@ -25,7 +25,11 @@ user asks for it or the domain is genuinely document-shaped.
    # Mongo variant: swap drizzle-orm/pg/drizzle-kit/@types/pg/@electric-sql/pglite
    # for: mongoose (dep) + mongodb-memory-server (dev)
    pnpm dlx shadcn@latest init            # then: pnpm dlx shadcn@latest add button card ...
+   pnpm dlx shadcn@latest mcp init --client claude   # writes .mcp.json (commit it)
    ```
+   The MCP server lets Claude browse, search, and install components from any
+   shadcn-compatible registry (including third-party ones) by name — no API key
+   needed. See "Registries and MCP" in the `shadcn-ui` skill.
 
 3. **Folder layout** under `src/`:
    ```

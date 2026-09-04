@@ -1,6 +1,6 @@
 {
   "name": "claude-agents-fullstack",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Claude Code toolkit: 7 agents, 10 skills, 5 commands for Next.js + TypeScript + PostgreSQL (Drizzle) or MongoDB + TanStack Query + shadcn/ui",
   "bin": {
     "claude-agents-fullstack": "bin/install.mjs"

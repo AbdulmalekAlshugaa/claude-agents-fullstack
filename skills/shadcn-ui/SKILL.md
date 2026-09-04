@@ -1,6 +1,6 @@
 ---
 name: shadcn-ui
-description: shadcn/ui conventions - installing and generating components with the CLI, theming with CSS variables, composing forms/dialogs/tables, and the AI SDK helpers for chat UIs. Use when adding UI components, building forms/dialogs/data tables, theming, or building an AI chat interface.
+description: shadcn/ui conventions - installing and generating components with the CLI, theming with CSS variables, composing forms/dialogs/tables, third-party registries and the shadcn MCP server (21st.dev as opt-in), and the AI SDK helpers for chat UIs. Use when adding UI components, looking for fancy/animated UI, building forms/dialogs/data tables, theming, or building an AI chat interface.
 ---
 
 # shadcn/ui
@@ -44,6 +44,53 @@ Rules:
   dialogs, comboboxes, date pickers, data tables, charts already exist.
 - Don't install all components "to be safe" — add on demand; each one is code
   you now own.
+
+## Registries and MCP
+
+The **official shadcn MCP server** is the default way to discover and install
+UI, including "fancy" third-party components. It is free and needs no API key:
+
+```bash
+pnpm dlx shadcn@latest mcp init --client claude   # writes .mcp.json in the project
+```
+
+With it wired up, ask in plain language ("add a login form", "find an animated
+hero section") and it searches and installs through the same CLI path — so the
+"always generate via the CLI" rule still holds.
+
+Third-party registries (Magic UI, Aceternity, Origin UI, Kibo UI, …) plug into
+`components.json` under `registries` and are addressed with a namespace:
+
+```bash
+pnpm dlx shadcn@latest add @magicui/shimmer-button
+```
+
+Prefer this route over hand-porting a component from a docs page: the registry
+item is versioned, declares its dependencies, and lands in `components/ui/`
+like everything else. Still restyle anything that ships with hard-coded palette
+classes onto the semantic tokens below.
+
+**21st.dev (opt-in, not installed by default).** A community catalog plus an
+MCP that can *generate* new component variants from a prompt. Reach for it only
+when no shadcn-compatible registry has what you need. Caveats: it needs an
+account (browser login or a `TWENTYFIRST_TOKEN` API key), free accounts get a
+small daily quota for retrieving component code, and AI generation costs
+credits. Two ways to bring code in, with different rules:
+
+- `21st add <user>/<slug>` installs through the 21st **shadcn registry** — same
+  footing as any registry item above, lands in `components/ui/`.
+- Anything from `21st get` or `21st generate` is bespoke code — put it in
+  `components/` or `modules/<feature>/components/`, **never** in
+  `components/ui/`, refactor its colors onto semantic tokens, and review it
+  like any third-party paste.
+
+Wire it per project when wanted (the `@21st-dev/cli` package supersedes the
+older `@21st-dev/magic`):
+
+```bash
+npx @21st-dev/cli login                          # one-time, saves a token in ~/.config/21st
+npx @21st-dev/cli init --client claude --write   # merges the 21st server into the MCP config
+```
 
 ## Theming
 
@@ -110,3 +157,5 @@ the real provider only after the UI is proven against the fake transport.
 - [ ] Semantic color tokens only in feature code
 - [ ] Forms: shared Zod schema client + server, pending state, field-level errors
 - [ ] Existing registry component checked before building a widget by hand
+- [ ] Third-party/generated components (registries, 21st.dev) live outside `components/ui/`
+      unless CLI-installed, and use semantic tokens

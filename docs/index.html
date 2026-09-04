@@ -341,7 +341,7 @@
       <span class="dotb">
         <i class="ln h t"></i><i class="ln v r"></i><i class="ln h b"></i><i class="ln v l"></i>
         <i class="dt tl"></i><i class="dt tr"></i><i class="dt br"></i><i class="dt bl"></i>
-        <a class="btn quiet" href="#install">./install.sh → ~/.claude/</a>
+        <a class="btn quiet" href="#install">npx claude-agents-fullstack</a>
       </span>
     </div>
   </div>
@@ -477,7 +477,7 @@
     </p>
     <div class="skills">
       <div class="skill"><span class="sname">tanstack-query</span><span class="sdesc">The data layer: option factories, key design, SSR hydration, invalidation, optimistic updates.</span></div>
-      <div class="skill"><span class="sname">shadcn-ui</span><span class="sdesc">CLI-generated components, semantic tokens, forms, and the AI SDK chat helpers.</span></div>
+      <div class="skill"><span class="sname">shadcn-ui</span><span class="sdesc">CLI-generated components, semantic tokens, forms, third-party registries via the shadcn MCP (21st.dev opt-in), and the AI SDK chat helpers.</span></div>
       <div class="skill"><span class="sname">web-app-scaffold</span><span class="sdesc">Bootstrap the whole stack, from create-next-app to a green first build.</span></div>
       <div class="skill"><span class="sname">postgres-data-modeling</span><span class="sdesc">Drizzle schemas, relations, indexes, keyset pagination, drizzle-kit migrations.</span></div>
       <div class="skill"><span class="sname">mongodb-data-modeling</span><span class="sdesc">Mongoose schemas, embed vs reference, ESR indexes, lean reads, pagination.</span></div>
@@ -497,16 +497,16 @@
         <button class="copy-btn" id="copy" type="button">copy</button>
       </div>
       <div class="code-scroll">
-<pre id="install-code"><span class="c"># available in every project — the installer asks
-# which database is your default: PostgreSQL or MongoDB</span>
-git clone https://github.com/AbdulmalekAlshugaa/claude-agents-fullstack
-cd claude-agents-fullstack
-./install.sh</pre>
+<pre id="install-code"><span class="c"># installs into ~/.claude — available in every project.
+# asks which database is your default: PostgreSQL or MongoDB</span>
+npx claude-agents-fullstack</pre>
       </div>
     </div>
     <p class="install-note">
-      Non-interactive: <code>./install.sh --db postgres</code> or <code>--db mongodb</code> — both stay
-      installed; the flag only sets the default for new apps. Per-project instead: copy
+      Non-interactive: <code>npx claude-agents-fullstack --db postgres</code> or <code>--db mongodb</code> — both
+      stay installed; the flag only sets the default for new apps. An existing <code>~/.claude/CLAUDE.md</code>
+      is backed up to <code>CLAUDE.md.bak</code> first. From a clone instead: <code>./install.sh</code>
+      (same prompts and flags). Per-project instead: copy
       <code>agents/</code>, <code>skills/</code>, <code>commands/</code> into the repo's <code>.claude/</code>
       directory and drop <code>templates/CLAUDE.md.template</code> in the root as <code>CLAUDE.md</code>.
     </p>
